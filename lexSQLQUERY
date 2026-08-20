@@ -1,0 +1,51 @@
+%{
+#include <stdio.h>
+%}
+digit       [0-9]
+letter      [a-zA-Z]
+id          {letter}({letter}|{digit}|_)*
+number      {digit}+(\.{digit}+)?
+string      '([^'\n]|'')*'
+
+%%
+
+[ \t\n]+ {
+ }
+
+SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|INDEX|AND|OR|NOT|IN|LIKE|IS|NULL|JOIN|ON|GROUP|BY|HAVING|ORDER|DISTINCT|AS|COUNT|SUM|AVG|MIN|MAX {    printf("KEYWORD: %s\n", yytext);
+}
+
+{id} {
+    printf("IDENTIFIER: %s\n", yytext);
+}
+
+{number} {
+    printf("NUMBER: %s\n", yytext);
+}
+
+{string} {
+    printf("STRING_LITERAL: %s\n", yytext);
+}
+
+"="|"<"|">"|"<="|">="|"<>"|"!=" {
+    printf("COMPARISON_OPERATOR: %s\n", yytext);
+}
+
+"+"|"-"|"*"|"/" {
+    printf("ARITHMETIC_OPERATOR: %s\n", yytext);
+}
+
+","|";"|"("|")"|"." {
+    printf("SYMBOL: %s\n", yytext);}
+
+. ;
+%%
+
+int yywrap() {
+    return 1;
+}
+int main() {
+    printf("Enter query:\n");
+    yylex();
+    return 0;
+}
