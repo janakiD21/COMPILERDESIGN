@@ -1,0 +1,25 @@
+%{
+#include<stdio.h>
+#include<string.h>
+char longest[100]="";
+%}
+%%
+[^ \t\n]+   {if(strlen(yytext)>strlen(longest)){strcpy(longest,yytext);}}
+.         ;
+[\t\n]+     ;
+%%
+int yywrap(){
+return 1;
+}
+int main(int argc,char *argv[]){
+if(argc>1){
+FILE *fp=fopen(argv[1],"r");
+yyin=fp;
+}
+yylex();
+printf("LONGEST STRING:%s\n",longest);
+return 0;
+}
+
+
+
